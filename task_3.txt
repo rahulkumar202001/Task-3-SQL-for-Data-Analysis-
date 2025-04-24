@@ -1,0 +1,66 @@
+SELECT employee_id, First_Name, Last_Name, Salary, Joining_Date 
+FROM employee
+WHERE Joining_Date > '2015-01-01'
+ORDER BY Salary DESC;
+
+
+SELECT Department, AVG(Salary) AS Avg_Salary
+FROM employee
+GROUP BY Department;
+
+
+SELECT e.employee_id, e.First_Name, e.Last_Name, e.Salary, b.Bonus_Amount
+FROM employee e
+INNER JOIN employee_bonus b ON e.employee_id = b.Employee_ref_id;
+
+
+
+SELECT e.employee_id, e.First_Name, e.Last_Name, e.Salary, b.Bonus_Amount
+FROM employee e
+LEFT JOIN employee_bonus b ON e.employee_id = b.Employee_ref_id;
+
+
+
+SELECT e.employee_id, e.First_Name, e.Last_Name, b.Bonus_Amount
+FROM employee e
+RIGHT JOIN employee_bonus b ON e.employee_id = b.Employee_ref_id;
+
+
+SELECT e.employee_id, e.First_Name, e.Last_Name, b.Bonus_Amount
+FROM employee e
+INNER JOIN employee_bonus b ON e.employee_id = b.Employee_ref_id
+WHERE b.Bonus_Amount > (SELECT AVG(Bonus_Amount) FROM employee_bonus);
+
+
+
+SELECT e.employee_id, e.First_Name, e.Last_Name, SUM(b.Bonus_Amount) AS Total_Bonus
+FROM employee e
+INNER JOIN employee_bonus b ON e.employee_id = b.Employee_ref_id
+GROUP BY e.employee_id
+HAVING SUM(b.Bonus_Amount) > 6000;
+
+
+
+CREATE VIEW employee_bonus_summary AS
+SELECT e.employee_id, e.First_Name, e.Last_Name, SUM(b.Bonus_Amount) AS Total_Bonus
+FROM employee e
+INNER JOIN employee_bonus b ON e.employee_id = b.Employee_ref_id
+GROUP BY e.employee_id;
+
+
+
+SELECT e.Department, 
+       MAX(b.Bonus_Amount) AS Max_Bonus, 
+       MIN(b.Bonus_Amount) AS Min_Bonus
+FROM employee e
+INNER JOIN employee_bonus b ON e.employee_id = b.Employee_ref_id
+GROUP BY e.Department;
+
+
+SELECT e.employee_id, e.First_Name, e.Last_Name, e.Department, t.Employee_Title, b.Bonus_Amount
+FROM employee e
+INNER JOIN employee_title t ON e.employee_id = t.Employee_ref_id
+LEFT JOIN employee_bonus b ON e.employee_id = b.Employee_ref_id;
+
+
+
